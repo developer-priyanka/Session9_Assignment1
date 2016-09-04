@@ -1,0 +1,38 @@
+1. What is the total amount of petrol in volume sold by every distributer?
+
+A = load'/patrol_dataset' using PigStorage(',') as (id:chararray,name:chararray,buyrate:chararray,sellrate:chararray,volumnin:int,volumeout:int,year:int);
+B = foreach A generate name,volumnout;
+C = group B by name;
+D = foreach C generate group,SUM(B.volumnout);
+Dump D;
+
+2. Which are the top 10 distributers ID's for selling petrol? Also display the amount of
+petrol sold in volume.
+
+A = load'/patrol_dataset' using PigStorage(',') as (id:chararray,name:chararray,buyrate:chararray,sellrate:chararray,volumnin:int,volumeout:int,year:int);
+B = foreach A generate id,volumnout;
+C = order B by volumnout desc;
+D = limit C 10;
+Dump D;
+
+
+3. List 10 years where consumption of petrol is more with the distributer id who sold it.
+
+A = load'/patrol_dataset' using PigStorage(',') as (id:chararray,name:chararray,buyrate:chararray,sellrate:chararray,volumnin:int,volumeout:int,year:int);
+B = foreach A generate id,volumeout,year;
+C = order B by volumout;
+D = foreach C generate id,year;
+E = limit D 10;
+Dump E;
+
+
+4. Find the distributer name who sold petrol in least amount.
+
+A = load'/patrol_dataset' using PigStorage(',') as (id:chararray,name:chararray,buyrate:chararray,sellrate:chararray,volumein:int,volumeout:int,year:int);
+B = foreach A generate name,volumeout;
+C = group B by name;
+D = foreach C generate group,SUM(B.volumeout) as total;
+E = order D by total;
+F = limit E 1;
+Dump F;
+
